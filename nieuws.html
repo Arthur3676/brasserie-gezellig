@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nieuws & Agenda – Brasserie Gezellig Leende</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1b3320; --green2: #2a4d32; --gold: #b8892a; --gold2: #d4a23c;
+    --cream: #f5efe4; --cream2: #ede5d6; --dark: #0f1f12;
+    --text: #2c3a2e; --muted: #6b7d6e; --white: #ffffff;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--cream); overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(15,31,18,0.93); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 68px; border-bottom: 1px solid rgba(184,137,42,0.25); }
+  .logo { font-family: 'Playfair Display', serif; color: var(--gold2); font-size: 1.35rem; font-weight: 700; text-decoration: none; }
+  .logo span { color: rgba(255,255,255,0.75); font-weight: 400; }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; transition: color .2s; }
+  nav a:hover { color: var(--gold2); }
+  .nav-cta { background: var(--gold); color: var(--dark) !important; padding: 0.45rem 1.2rem; border-radius: 4px; font-weight: 600 !important; }
+
+  .hero { height: 45vh; min-height: 320px; background: linear-gradient(160deg, rgba(15,31,18,0.82) 0%, rgba(27,51,32,0.65) 100%), url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=85') center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
+  .hero-tag { display: inline-block; background: rgba(184,137,42,0.18); border: 1px solid var(--gold); color: var(--gold2); font-size: 0.73rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 0.38rem 1rem; border-radius: 50px; margin-bottom: 1.2rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--white); line-height: 1.2; margin-bottom: 0.8rem; }
+  .hero h1 em { color: var(--gold2); font-style: italic; }
+  .hero p { color: rgba(255,255,255,0.75); font-size: 0.97rem; max-width: 460px; margin: 0 auto; line-height: 1.6; }
+
+  /* TABS */
+  .tabs-wrap { background: var(--green); position: sticky; top: 68px; z-index: 50; border-bottom: 2px solid rgba(184,137,42,0.3); }
+  .tabs { display: flex; max-width: 1100px; margin: 0 auto; padding: 0 5%; }
+  .tab-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 1.1rem 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; margin-bottom: -2px; }
+  .tab-btn:hover { color: rgba(255,255,255,0.9); }
+  .tab-btn.active { color: var(--gold2); border-bottom-color: var(--gold2); }
+
+  /* CONTENT */
+  .tab-content { display: none; max-width: 1100px; margin: 0 auto; padding: 60px 5%; }
+  .tab-content.active { display: block; }
+
+  .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.4rem); color: var(--green); line-height: 1.2; margin-bottom: 2rem; }
+
+  /* NIEUWS GRID */
+  .nieuws-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .nieuws-card { background: var(--white); border-radius: 14px; overflow: hidden; border: 1px solid #ddd5c4; transition: transform .25s, box-shadow .25s; cursor: pointer; }
+  .nieuws-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+  .nieuws-img { height: 200px; background-size: cover; background-position: center; }
+  .nieuws-body { padding: 1.5rem; }
+  .nieuws-meta { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; }
+  .nieuws-datum { font-size: 0.75rem; color: var(--muted); }
+  .nieuws-tag { background: var(--cream2); color: var(--gold); font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; }
+  .nieuws-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--green); margin-bottom: 0.5rem; line-height: 1.3; }
+  .nieuws-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .lees-meer { display: inline-block; margin-top: 1rem; font-size: 0.82rem; font-weight: 600; color: var(--gold); letter-spacing: 0.05em; }
+
+  /* AGENDA */
+  .agenda-lijst { display: flex; flex-direction: column; gap: 1rem; }
+  .agenda-item { background: var(--white); border-radius: 12px; border: 1px solid #ddd5c4; display: flex; gap: 1.5rem; align-items: stretch; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+  .agenda-item:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+  .agenda-datum { background: var(--green); color: var(--white); min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.2rem; text-align: center; flex-shrink: 0; }
+  .agenda-dag { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--gold2); line-height: 1; }
+  .agenda-maand { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 0.3rem; }
+  .agenda-body { padding: 1.2rem; flex: 1; }
+  .agenda-body h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--green); margin-bottom: 0.3rem; }
+  .agenda-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .agenda-tijd { font-size: 0.78rem; font-weight: 600; color: var(--gold); margin-top: 0.5rem; }
+  .agenda-label { display: inline-block; background: var(--cream2); color: var(--text); font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; margin-top: 0.5rem; }
+  .agenda-voorbij .agenda-datum { background: var(--muted); }
+  .agenda-voorbij { opacity: 0.6; }
+
+  footer { background: var(--dark); color: rgba(255,255,255,0.45); text-align: center; padding: 2rem 5%; font-size: 0.8rem; }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .nieuws-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Brasserie <span>Gezellig</span></a>
+<ul>
+  <li><a href="menukaart.html">Menukaart</a></li>
+  <li><a href="arrangementen.html">Arrangementen</a></li>
+  <li><a href="galerij.html">Galerij</a></li>
+  <li><a href="nieuws.html">Nieuws & Agenda</a></li>
+  <li><a href="contact.html">Contact</a></li>
+  <li><a href="index.html#reserveer" class="nav-cta">Reserveer</a></li>
+</ul>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-tag">✦ Blijf op de hoogte</div>
+    <h1>Nieuws & <em>Agenda</em></h1>
+    <p>Mis niets van wat er speelt bij Brasserie Gezellig. Van nieuwe seizoensgerechten tot gezellige evenementen.</p>
+  </div>
+</section>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('nieuws', this)">Nieuws</button>
+    <button class="tab-btn" onclick="showTab('agenda', this)">Agenda</button>
+  </div>
+</div>
+
+<!-- NIEUWS -->
+<div class="tab-content active" id="tab-nieuws">
+  <p class="section-label">Laatste updates</p>
+  <h2 class="section-title">Nieuws</h2>
+  <div class="nieuws-grid">
+
+    <div class="nieuws-card">
+      <div class="nieuws-img" style="background-image:url('https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=85')"></div>
+      <div class="nieuws-body">
+        <div class="nieuws-meta"><span class="nieuws-datum">15 april 2025</span><span class="nieuws-tag">Menukaart</span></div>
+        <h3>Nieuwe lentekaar t is er!</h3>
+        <p>Onze chef heeft een prachtige lentekaart samengesteld met verse seizoensproducten. Kom proeven en laat u verrassen.</p>
+        <span class="lees-meer">Lees meer →</span>
+      </div>
+    </div>
+
+    <div class="nieuws-card">
+      <div class="nieuws-img" style="background-image:url('https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=600&q=85')"></div>
+      <div class="nieuws-body">
+        <div class="nieuws-meta"><span class="nieuws-datum">2 april 2025</span><span class="nieuws-tag">Evenement</span></div>
+        <h3>Bierproeverij een geslaagde avond</h3>
+        <p>Afgelopen vrijdag organiseerden wij een geweldige bierproeverij met Will de Krom. Een onvergetelijke avond voor alle bierliefhebbers.</p>
+        <span class="lees-meer">Lees meer →</span>
+      </div>
+    </div>
+
+    <div class="nieuws-card">
+      <div class="nieuws-img" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=85')"></div>
+      <div class="nieuws-body">
+        <div class="nieuws-meta"><span class="nieuws-datum">10 maart 2025</span><span class="nieuws-tag">Mosselen</span></div>
+        <h3>Mosselen zijn er weer!</h3>
+        <p>De mosselen zijn terug op de kaart. Traditioneel of op zijn Gezellig kom genieten op het terras voor een pannetje verse mosselen.</p>
+        <span class="lees-meer">Lees meer →</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- AGENDA -->
+<div class="tab-content" id="tab-agenda">
+  <p class="section-label">Wat staat er op het programma</p>
+  <h2 class="section-title">Agenda</h2>
+  <div class="agenda-lijst">
+
+    <div class="agenda-item">
+      <div class="agenda-datum"><div class="agenda-dag">12</div><div class="agenda-maand">Jul</div></div>
+      <div class="agenda-body">
+        <h3>BBQ Avond op het Terras</h3>
+        <p>Geniet van een gezellige BBQ-avond op ons grote achterterras. Sfeer, muziek en heerlijk eten voor iedereen.</p>
+        <div class="agenda-tijd">18:00 – 22:00</div>
+        <span class="agenda-label">Aanmelden verplicht</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-datum"><div class="agenda-dag">19</div><div class="agenda-maand">Jul</div></div>
+      <div class="agenda-body">
+        <h3>Toeptoernooi Gezellig</h3>
+        <p>Het jaarlijkse toeptoernooi is terug! Schrijf je in en strijd voor de felbegeerde Gezellig-beker. Inschrijving start om 14:00.</div>
+        <div class="agenda-tijd">14:00 – 22:00</div>
+        <span class="agenda-label">Gratis deelname</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-datum"><div class="agenda-dag">2</div><div class="agenda-maand">Aug</div></div>
+      <div class="agenda-body">
+        <h3>Bierproeverij met gastspreker</h3>
+        <p>Een avond vol speciaalbier, verhalen en gezelligheid. Onze biersommelier neemt u mee door een unieke selectie bieren.</p>
+        <div class="agenda-tijd">19:30 – 22:30</div>
+        <span class="agenda-label">Beperkt aantal plaatsen</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-datum"><div class="agenda-dag">26</div><div class="agenda-maand">Aug</div></div>
+      <div class="agenda-body">
+        <h3>Vakantiesluiting</h3>
+        <p>Brasserie Gezellig is gesloten van 26 juli t/m 6 augustus. Daarna staan wij weer voor u klaar met een verse herfstkaart.</p>
+        <div class="agenda-tijd">Hele dag</div>
+        <span class="agenda-label">Gesloten</span>
+      </div>
+    </div>
+
+    <div class="agenda-item agenda-voorbij">
+      <div class="agenda-datum"><div class="agenda-dag">22</div><div class="agenda-maand">Mrt</div></div>
+      <div class="agenda-body">
+        <h3>Paasbrunch</h3>
+        <p>Een heerlijke Paasbrunch voor het hele gezin. Inmiddels voorbij, maar houd de agenda in de gaten voor de volgende editie.</p>
+        <div class="agenda-tijd">10:00 – 14:00</div>
+        <span class="agenda-label">Afgelopen</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Brasserie Gezellig Leende &nbsp;·&nbsp; Langstraat 8, 5595 AA Leende &nbsp;·&nbsp; <a href="tel:0402062019">040-2062019</a> &nbsp;·&nbsp; <a href="mailto:info@brasseriegezellig.nl">info@brasseriegezellig.nl</a></p>
+  <p style="margin-top:0.4rem"><a href="privacy.html">Privacyverklaring</a> &nbsp;·&nbsp; <a href="#">Cookies</a></p>
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+<!-- COOKIE BANNER — plak dit net voor </body> op elke pagina -->
+<div id="cookieBanner" style="
+  display:none;
+  position:fixed;
+  bottom:0; left:0; right:0;
+  z-index:9999;
+  background:#0f1f12;
+  border-top:2px solid rgba(184,137,42,0.4);
+  padding:1.2rem 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1rem;
+  font-family:'Inter',sans-serif;
+">
+  <p style="color:rgba(255,255,255,0.75);font-size:0.85rem;line-height:1.6;max-width:700px;margin:0;">
+    Wij gebruiken cookies om uw gebruikerservaring te verbeteren en het websiteverkeer te analyseren.
+    Door op <strong style="color:#d4a23c">Accepteren</strong> te klikken gaat u akkoord met ons cookiegebruik.
+    <a href="privacy.html" style="color:#b8892a;text-decoration:none;margin-left:0.3rem;">Meer informatie</a>
+  </p>
+  <div style="display:flex;gap:0.8rem;flex-shrink:0;">
+    <button onclick="weigercookies()" style="
+      background:transparent;
+      border:1.5px solid rgba(255,255,255,0.3);
+      color:rgba(255,255,255,0.7);
+      padding:0.55rem 1.2rem;
+      border-radius:4px;
+      font-size:0.82rem;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+    ">Weigeren</button>
+    <button onclick="accepteercookies()" style="
+      background:#b8892a;
+      border:none;
+      color:#0f1f12;
+      padding:0.55rem 1.4rem;
+      border-radius:4px;
+      font-size:0.82rem;
+      font-weight:600;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+    ">Accepteren</button>
+  </div>
+</div>
+
+<script>
+  // Toon de banner alleen als de gebruiker nog geen keuze heeft gemaakt
+  if (!localStorage.getItem('cookieKeuze')) {
+    document.getElementById('cookieBanner').style.display = 'flex';
+  }
+  function accepteercookies() {
+    localStorage.setItem('cookieKeuze', 'geaccepteerd');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+  function weigercookies() {
+    localStorage.setItem('cookieKeuze', 'geweigerd');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+</script>
+<!-- EINDE COOKIE BANNER -->
+</body>
+</html>

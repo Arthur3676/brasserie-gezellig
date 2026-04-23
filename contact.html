@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact – Brasserie Gezellig Leende</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1b3320; --green2: #2a4d32; --gold: #b8892a; --gold2: #d4a23c;
+    --cream: #f5efe4; --cream2: #ede5d6; --dark: #0f1f12;
+    --text: #2c3a2e; --muted: #6b7d6e; --white: #ffffff;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--cream); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(15,31,18,0.93); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 68px; border-bottom: 1px solid rgba(184,137,42,0.25); }
+  .logo { font-family: 'Playfair Display', serif; color: var(--gold2); font-size: 1.35rem; font-weight: 700; text-decoration: none; }
+  .logo span { color: rgba(255,255,255,0.75); font-weight: 400; }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; transition: color .2s; }
+  nav a:hover { color: var(--gold2); }
+  .nav-cta { background: var(--gold); color: var(--dark) !important; padding: 0.45rem 1.2rem; border-radius: 4px; font-weight: 600 !important; }
+
+  /* HERO */
+  .hero { height: 45vh; min-height: 320px; background: linear-gradient(160deg, rgba(15,31,18,0.82) 0%, rgba(27,51,32,0.65) 100%), url('https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1600&q=85') center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
+  .hero-tag { display: inline-block; background: rgba(184,137,42,0.18); border: 1px solid var(--gold); color: var(--gold2); font-size: 0.73rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 0.38rem 1rem; border-radius: 50px; margin-bottom: 1.2rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--white); line-height: 1.2; margin-bottom: 0.8rem; }
+  .hero h1 em { color: var(--gold2); font-style: italic; }
+  .hero p { color: rgba(255,255,255,0.75); font-size: 0.97rem; max-width: 460px; margin: 0 auto; line-height: 1.6; }
+
+  /* MAIN GRID */
+  .main { max-width: 1100px; margin: 0 auto; padding: 80px 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+
+  /* CONTACT INFO */
+  .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.4rem); color: var(--green); line-height: 1.2; margin-bottom: 1.5rem; }
+
+  .info-card { background: var(--green); border-radius: 14px; padding: 2rem; margin-bottom: 1.5rem; }
+  .info-card h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold2); margin-bottom: 1.2rem; }
+  .info-row { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.1rem; }
+  .info-row:last-child { margin: 0; }
+  .info-ico { width: 36px; height: 36px; background: rgba(255,255,255,0.09); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+  .info-row div p { font-size: 0.75rem; color: rgba(255,255,255,0.45); margin-bottom: 0.1rem; }
+  .info-row div a, .info-row div span { color: var(--white); text-decoration: none; font-size: 0.93rem; font-weight: 500; }
+  .info-row div a:hover { color: var(--gold2); }
+
+  /* OPENINGSTIJDEN */
+  .ot-card { background: var(--white); border: 1px solid #ddd5c4; border-radius: 14px; padding: 2rem; }
+  .ot-card h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--green); margin-bottom: 1.2rem; }
+  .ot-table { width: 100%; border-collapse: collapse; }
+  .ot-table tr { border-bottom: 1px solid var(--cream2); }
+  .ot-table tr:last-child { border: none; }
+  .ot-table td { padding: 0.7rem 0; font-size: 0.9rem; }
+  .ot-table td:first-child { color: var(--muted); font-weight: 500; }
+  .ot-table td:last-child { text-align: right; font-weight: 600; color: var(--green); }
+  .closed { color: #b03a2e !important; }
+  .today-row td:first-child { color: var(--gold) !important; font-weight: 600 !important; }
+  .today-badge { display: inline-block; background: var(--gold); color: var(--dark); font-size: 0.68rem; font-weight: 700; padding: 0.12rem 0.48rem; border-radius: 50px; margin-left: 0.4rem; vertical-align: middle; }
+
+  /* CONTACTFORMULIER */
+  .form-card { background: var(--white); border: 1px solid #ddd5c4; border-radius: 14px; padding: 2.5rem; }
+  .form-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green); margin-bottom: 0.4rem; }
+  .form-card p { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.8rem; line-height: 1.6; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ddd5c4; border-radius: 6px; font-size: 0.93rem; font-family: 'Inter', sans-serif; color: var(--text); background: var(--cream); transition: border-color .2s; appearance: none; resize: vertical; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .btn-primary { background: var(--gold); color: var(--dark); border: none; padding: 0.9rem 2rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 0.5rem; transition: all .2s; font-family: 'Inter', sans-serif; }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+
+  /* BEVESTIGING */
+  .confirm-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(15,31,18,0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+  .confirm-overlay.show { display: flex; }
+  .confirm-box { background: var(--white); border-radius: 16px; padding: 3rem; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.2); }
+  .confirm-icon { width: 62px; height: 62px; background: #e6f0e8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.4rem; font-size: 1.7rem; color: var(--green); }
+  .confirm-box h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green); margin-bottom: 0.8rem; }
+  .confirm-box p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+  .confirm-box .btn-primary { width: auto; padding: 0.8rem 2rem; }
+
+  /* KAART */
+  .map-wrap { max-width: 1100px; margin: 0 auto 80px; padding: 0 5%; }
+  .map-wrap h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--green); margin-bottom: 1.2rem; }
+  .map-frame { border-radius: 14px; overflow: hidden; border: 1px solid #ddd5c4; height: 380px; }
+  .map-frame iframe { width: 100%; height: 100%; border: none; }
+
+  /* FOOTER */
+  footer { background: var(--dark); color: rgba(255,255,255,0.45); text-align: center; padding: 2rem 5%; font-size: 0.8rem; }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .main { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Brasserie <span>Gezellig</span></a>
+ <ul>
+  <li><a href="menukaart.html">Menukaart</a></li>
+  <li><a href="arrangementen.html">Arrangementen</a></li>
+  <li><a href="galerij.html">Galerij</a></li>
+  <li><a href="nieuws.html">Nieuws & Agenda</a></li>
+  <li><a href="contact.html">Contact</a></li>
+  <li><a href="index.html#reserveer" class="nav-cta">Reserveer</a></li>
+</ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-tag">✦ We horen graag van u</div>
+    <h1>Neem <em>contact</em> op</h1>
+    <p>Heeft u een vraag, wilt u een arrangement bespreken of zoekt u meer informatie? Wij staan voor u klaar.</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LINKS: INFO + TIJDEN -->
+  <div>
+    <p class="section-label">Bereikbaarheid</p>
+    <h2 class="section-title">Vind ons</h2>
+
+    <div class="info-card">
+      <h4>Brasserie Gezellig</h4>
+      <div class="info-row">
+        <div class="info-ico">📍</div>
+        <div><p>Adres</p><span>Langstraat 8, 5595 AA Leende</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">📞</div>
+        <div><p>Telefoon</p><a href="tel:0402062019">040-2062019</a></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">✉️</div>
+        <div><p>E-mail</p><a href="mailto:info@brasseriegezellig.nl">info@brasseriegezellig.nl</a></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">🚗</div>
+        <div><p>Routebeschrijving</p><span style="font-size:0.83rem;color:rgba(255,255,255,0.6)">Vanaf A2 afslag Valkenswaard, volg Heeze/Geldrop. Aan het einde van Leende, links aan de Langstraat.</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">ℹ️</div>
+        <div><p>Tip</p><span style="font-size:0.83rem;color:rgba(255,255,255,0.6)">Dezelfde dag reserveren? Bel ons direct.</span></div>
+      </div>
+    </div>
+
+    <div class="ot-card">
+      <h4>Openingstijden</h4>
+      <table class="ot-table">
+        <tr><td>Maandag</td><td class="closed">Gesloten</td></tr>
+        <tr class="today-row"><td>Dinsdag <span class="today-badge">Vandaag</span></td><td class="closed">Gesloten</td></tr>
+        <tr><td>Woensdag</td><td>11:30 – 22:00</td></tr>
+        <tr><td>Donderdag</td><td>11:30 – 22:00</td></tr>
+        <tr><td>Vrijdag</td><td>11:30 – 22:00</td></tr>
+        <tr><td>Zaterdag</td><td>11:30 – 22:00</td></tr>
+        <tr><td>Zondag</td><td>10:00 – 22:00</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- RECHTS: FORMULIER -->
+  <div>
+    <div class="form-card">
+      <h3>Stuur een bericht</h3>
+      <p>Vul het formulier in en wij nemen zo snel mogelijk contact met u op. Voor urgente vragen kunt u ons ook bellen.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Voornaam</label>
+          <input type="text" id="fname" placeholder="Jan">
+        </div>
+        <div class="form-group">
+          <label>Achternaam</label>
+          <input type="text" id="lname" placeholder="de Vries">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-mailadres</label>
+        <input type="email" id="email" placeholder="jan@email.nl">
+      </div>
+      <div class="form-group">
+        <label>Telefoonnummer</label>
+        <input type="tel" id="tel" placeholder="06-12345678">
+      </div>
+      <div class="form-group">
+        <label>Onderwerp</label>
+        <select id="subject">
+          <option value="">Selecteer een onderwerp</option>
+          <option>Reservering</option>
+          <option>Feest of arrangement</option>
+          <option>BBQ of groepsboeking</option>
+          <option>Menukaart informatie</option>
+          <option>Overig</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Bericht</label>
+        <textarea id="message" rows="5" placeholder="Uw bericht..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="submitForm()">Verstuur bericht →</button>
+    </div>
+  </div>
+</div>
+
+<!-- KAART -->
+<div class="map-wrap">
+  <h3>Hoe u ons vindt</h3>
+  <div class="map-frame">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2487.9!2d5.5607!3d51.3425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c6d6e0b0e0e0e0%3A0x0!2sLangstraat+8%2C+5595+AA+Leende!5e0!3m2!1snl!2snl!4v1600000000000!5m2!1snl!2snl" allowfullscreen loading="lazy"></iframe>
+  </div>
+</div>
+
+<!-- BEVESTIGING -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">✓</div>
+    <h3>Bericht verzonden!</h3>
+    <p>Bedankt voor uw bericht. Wij nemen zo snel mogelijk contact met u op. Voor urgente vragen kunt u ons bereiken op <strong>040-2062019</strong>.</p>
+    <button class="btn-primary" onclick="closeConfirm()">Sluiten</button>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Brasserie Gezellig Leende &nbsp;·&nbsp; Langstraat 8, 5595 AA Leende &nbsp;·&nbsp; <a href="tel:0402062019">040-2062019</a> &nbsp;·&nbsp; <a href="mailto:info@brasseriegezellig.nl">info@brasseriegezellig.nl</a></p>
+  <p style="margin-top:0.4rem"><a href="privacy.html">Privacyverklaring</a> &nbsp;·&nbsp; <a href="#">Cookies</a></p>
+</footer>
+
+<script>
+  function submitForm() {
+    const fname = document.getElementById('fname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    if (!fname) { alert('Vul uw voornaam in.'); return; }
+    if (!email) { alert('Vul uw e-mailadres in.'); return; }
+    if (!message) { alert('Vul een bericht in.'); return; }
+    document.getElementById('confirmOverlay').classList.add('show');
+  }
+  function closeConfirm() {
+    document.getElementById('confirmOverlay').classList.remove('show');
+    document.getElementById('fname').value = '';
+    document.getElementById('lname').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('tel').value = '';
+    document.getElementById('subject').value = '';
+    document.getElementById('message').value = '';
+  }
+  document.getElementById('confirmOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('confirmOverlay')) closeConfirm();
+  });
+</script>
+<!-- COOKIE BANNER — plak dit net voor </body> op elke pagina -->
+<div id="cookieBanner" style="
+  display:none;
+  position:fixed;
+  bottom:0; left:0; right:0;
+  z-index:9999;
+  background:#0f1f12;
+  border-top:2px solid rgba(184,137,42,0.4);
+  padding:1.2rem 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1rem;
+  font-family:'Inter',sans-serif;
+">
+  <p style="color:rgba(255,255,255,0.75);font-size:0.85rem;line-height:1.6;max-width:700px;margin:0;">
+    Wij gebruiken cookies om uw gebruikerservaring te verbeteren en het websiteverkeer te analyseren.
+    Door op <strong style="color:#d4a23c">Accepteren</strong> te klikken gaat u akkoord met ons cookiegebruik.
+    <a href="privacy.html" style="color:#b8892a;text-decoration:none;margin-left:0.3rem;">Meer informatie</a>
+  </p>
+  <div style="display:flex;gap:0.8rem;flex-shrink:0;">
+    <button onclick="weigercookies()" style="
+      background:transparent;
+      border:1.5px solid rgba(255,255,255,0.3);
+      color:rgba(255,255,255,0.7);
+      padding:0.55rem 1.2rem;
+      border-radius:4px;
+      font-size:0.82rem;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+    ">Weigeren</button>
+    <button onclick="accepteercookies()" style="
+      background:#b8892a;
+      border:none;
+      color:#0f1f12;
+      padding:0.55rem 1.4rem;
+      border-radius:4px;
+      font-size:0.82rem;
+      font-weight:600;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+    ">Accepteren</button>
+  </div>
+</div>
+
+<script>
+  // Toon de banner alleen als de gebruiker nog geen keuze heeft gemaakt
+  if (!localStorage.getItem('cookieKeuze')) {
+    document.getElementById('cookieBanner').style.display = 'flex';
+  }
+  function accepteercookies() {
+    localStorage.setItem('cookieKeuze', 'geaccepteerd');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+  function weigercookies() {
+    localStorage.setItem('cookieKeuze', 'geweigerd');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+</script>
+<!-- EINDE COOKIE BANNER -->
+</body>
+</html>

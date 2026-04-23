@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menukaart – Brasserie Gezellig Leende</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1b3320; --green2: #2a4d32; --gold: #b8892a; --gold2: #d4a23c;
+    --cream: #f5efe4; --cream2: #ede5d6; --dark: #0f1f12;
+    --text: #2c3a2e; --muted: #6b7d6e; --white: #ffffff;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--cream); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(15,31,18,0.93); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 68px; border-bottom: 1px solid rgba(184,137,42,0.25); }
+  .logo { font-family: 'Playfair Display', serif; color: var(--gold2); font-size: 1.35rem; font-weight: 700; text-decoration: none; }
+  .logo span { color: rgba(255,255,255,0.75); font-weight: 400; }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; transition: color .2s; }
+  nav a:hover { color: var(--gold2); }
+  .nav-cta { background: var(--gold); color: var(--dark) !important; padding: 0.45rem 1.2rem; border-radius: 4px; font-weight: 600 !important; }
+
+  /* HERO */
+  .hero { height: 45vh; min-height: 340px; background: linear-gradient(160deg, rgba(15,31,18,0.82) 0%, rgba(27,51,32,0.65) 100%), url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=85') center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
+  .hero-tag { display: inline-block; background: rgba(184,137,42,0.18); border: 1px solid var(--gold); color: var(--gold2); font-size: 0.73rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 0.38rem 1rem; border-radius: 50px; margin-bottom: 1.2rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--white); line-height: 1.2; margin-bottom: 0.8rem; }
+  .hero h1 em { color: var(--gold2); font-style: italic; }
+  .hero p { color: rgba(255,255,255,0.75); font-size: 0.97rem; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+
+  /* TABS */
+  .tabs-wrap { background: var(--green); position: sticky; top: 68px; z-index: 50; border-bottom: 2px solid rgba(184,137,42,0.3); }
+  .tabs { display: flex; overflow-x: auto; max-width: 1200px; margin: 0 auto; padding: 0 5%; gap: 0; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 1rem 1.2rem; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all .2s; margin-bottom: -2px; }
+  .tab-btn:hover { color: rgba(255,255,255,0.9); }
+  .tab-btn.active { color: var(--gold2); border-bottom-color: var(--gold2); }
+
+  /* CONTENT */
+  .menu-section { display: none; max-width: 900px; margin: 0 auto; padding: 60px 5%; }
+  .menu-section.active { display: block; }
+  .menu-section-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--green); margin-bottom: 0.4rem; }
+  .menu-section-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 2.5rem; }
+
+  /* CHEF MENU BOX */
+  .chef-box { background: var(--green); color: var(--white); border-radius: 14px; padding: 2rem; margin-bottom: 2.5rem; text-align: center; }
+  .chef-box h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold2); margin-bottom: 1rem; }
+  .chef-gangs { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+  .chef-gang { background: rgba(255,255,255,0.08); border: 1px solid rgba(184,137,42,0.3); border-radius: 10px; padding: 1rem 1.5rem; }
+  .chef-gang div:first-child { font-size: 1.1rem; font-weight: 700; color: var(--gold2); }
+  .chef-gang div:last-child { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+  .chef-note { font-size: 0.82rem; color: rgba(255,255,255,0.5); font-style: italic; }
+
+  /* CATEGORIE HEADER */
+  .cat-header { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--green); border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem; margin: 2.5rem 0 1.2rem; letter-spacing: 0.02em; }
+  .cat-note { font-size: 0.8rem; color: var(--muted); margin: -0.8rem 0 1.2rem; font-style: italic; }
+
+  /* MENU ITEMS */
+  .menu-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 1rem 0; border-bottom: 1px solid var(--cream2); gap: 1rem; }
+  .menu-item:last-child { border: none; }
+  .item-info { flex: 1; }
+  .item-name { font-weight: 600; font-size: 0.97rem; color: var(--text); margin-bottom: 0.25rem; }
+  .item-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .item-price { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; color: var(--gold); white-space: nowrap; padding-top: 0.1rem; }
+  .item-tag { display: inline-block; background: var(--cream2); color: var(--muted); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em; padding: 0.15rem 0.5rem; border-radius: 50px; margin-left: 0.4rem; vertical-align: middle; }
+  .dagprijs { color: var(--gold); font-size: 0.85rem; font-weight: 600; font-style: italic; }
+
+  /* DRANKEN GRID */
+  .dranken-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .drink-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--cream2); font-size: 0.9rem; }
+  .drink-item span:first-child { color: var(--text); }
+  .drink-item span:last-child { color: var(--gold); font-weight: 600; }
+
+  /* WIJN KAART */
+  .wijn-card { background: var(--white); border: 1px solid #ddd5c4; border-radius: 12px; padding: 1.3rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .wijn-naam { font-weight: 600; font-size: 0.97rem; color: var(--text); margin-bottom: 0.25rem; }
+  .wijn-desc { font-size: 0.78rem; color: var(--muted); }
+  .wijn-origin { font-size: 0.72rem; color: var(--gold); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.2rem; }
+  .wijn-price { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--gold); white-space: nowrap; }
+
+  /* FOOTER */
+  footer { background: var(--dark); color: rgba(255,255,255,0.45); text-align: center; padding: 2rem 5%; font-size: 0.8rem; }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .dranken-grid { grid-template-columns: 1fr; }
+    .chef-gangs { gap: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Brasserie <span>Gezellig</span></a>
+  <ul>
+  <li><a href="menukaart.html">Menukaart</a></li>
+  <li><a href="arrangementen.html">Arrangementen</a></li>
+  <li><a href="galerij.html">Galerij</a></li>
+  <li><a href="nieuws.html">Nieuws & Agenda</a></li>
+  <li><a href="contact.html">Contact</a></li>
+  <li><a href="index.html#reserveer" class="nav-cta">Reserveer</a></li>
+</ul>
+</nav>
+    <li><a href="index.html#reserveer" class="nav-cta">Reserveer</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-tag">✦ Vers en met passie bereid</div>
+    <h1>Onze <em>Menukaart</em></h1>
+    <p>Van borrel tot dessert, van pasta tot tournedos. Voor ieder wat wils bij Brasserie Gezellig.</p>
+  </div>
+</section>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('borrel')">Borrel & Bites</button>
+    <button class="tab-btn" onclick="showTab('voor')">Voorgerecht</button>
+    <button class="tab-btn" onclick="showTab('chef')">Chef Specials</button>
+    <button class="tab-btn" onclick="showTab('pasta')">Pasta & Burgers</button>
+    <button class="tab-btn" onclick="showTab('hoofd')">Hoofdgerecht</button>
+    <button class="tab-btn" onclick="showTab('dessert')">Dessert</button>
+    <button class="tab-btn" onclick="showTab('kinder')">Kindermenu</button>
+    <button class="tab-btn" onclick="showTab('dranken')">Dranken</button>
+    <button class="tab-btn" onclick="showTab('wijn')">Wijnen</button>
+  </div>
+</div>
+
+<!-- BORREL & BITES -->
+<div class="menu-section active" id="tab-borrel">
+  <h2 class="menu-section-title">Borrel & Bites</h2>
+  <p class="menu-section-sub">To share perfect om samen te genieten</p>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Brood-plank</div><div class="item-desc">Aioli / Tapenade / Kruidenboter</div></div><div class="item-price">€7</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">BBQ Chicken Wings</div><div class="item-desc">BBQ saus / Gemengde salade</div></div><div class="item-price">€9</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Olijven & Parmaham</div><div class="item-desc">Walnoot / Truffel / Champignons / Parmezaan / Rucola</div></div><div class="item-price">€9</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Gyoza's</div><div class="item-desc">Krokant gebakken Japanse dumplings</div></div><div class="item-price">€14</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Torpedo Garnalen</div><div class="item-desc">5 st / Chili saus</div></div><div class="item-price">€12</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Bitterballen</div><div class="item-desc">8 st / Mosterd</div></div><div class="item-price">€8</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Nacho's</div><div class="item-desc">Guacamole / Cremefresh / Salsa</div></div><div class="item-price">€14</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Bruchetta</div><div class="item-desc">Tomaat / Balsamico / Basilicum 5 stuks</div></div><div class="item-price">€7</div></div>
+</div>
+
+<!-- VOORGERECHT -->
+<div class="menu-section" id="tab-voor">
+  <h2 class="menu-section-title">Voorgerecht</h2>
+  <p class="menu-section-sub">Een perfecte start van uw diner</p>
+  <div class="chef-box">
+    <h3>Chefs Menu</h3>
+    <div class="chef-gangs">
+      <div class="chef-gang"><div>3 gangen</div><div>€42 p.p.</div></div>
+      <div class="chef-gang"><div>4 gangen</div><div>€47,50 p.p.</div></div>
+      <div class="chef-gang"><div>5 gangen</div><div>€52,50 p.p.</div></div>
+    </div>
+    <div class="chef-note">Alleen per tafel te bestellen</div>
+  </div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Carpaccio</div><div class="item-desc">Parmezaan / Tomaat / Pitten mix / Truffel mayo</div></div><div class="item-price">€14</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Steak Tartaar</div><div class="item-desc">Ei / Zoet zuur / Furikake / Japanse mayonaise</div></div><div class="item-price">€15</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Coeur de Bouef</div><div class="item-desc">Olijf / Basilicum / Feta / Tomaat</div></div><div class="item-price">€13</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Vitello Tonnato</div><div class="item-desc">Olijf / Basilicum / Feta</div></div><div class="item-price">€13</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Buratta</div><div class="item-desc">Tomaat / Basilicum / Balsamico</div></div><div class="item-price">€13</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Gebakken Scampi's</div><div class="item-desc">6 st / Knoflook-room / Verse kruiden</div></div><div class="item-price">€13,50</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Vis-Plateau</div><div class="item-desc">Zalm / Paling / Garnalen / Forel / Krab / Rivier kreeft</div></div><div class="item-price">€15</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Proeverij Gezellig <span class="item-tag">Aanrader</span></div><div class="item-desc">Combinatie van voorgerechten</div></div><div class="item-price">€19,50</div></div>
+</div>
+
+<!-- CHEF SPECIALS -->
+<div class="menu-section" id="tab-chef">
+  <h2 class="menu-section-title">Chef Specials</h2>
+  <p class="menu-section-sub">Tussengerecht & soep</p>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Cquille</div><div class="item-desc">Citrus / Buerre blanc / Parmezaan</div></div><div class="item-price">€18</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Tomaten Pomodori</div><div class="item-desc">Soep groente / Runder gehakt</div></div><div class="item-price">€7,50</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Dag Soep</div><div class="item-desc">Suggestie van de chef</div></div><div class="item-price">€7,50</div></div>
+</div>
+
+<!-- PASTA & BURGERS -->
+<div class="menu-section" id="tab-pasta">
+  <h2 class="menu-section-title">Pasta & Burgers</h2>
+  <p class="menu-section-sub">Pasta's worden geserveerd met frisse salade</p>
+  <div class="cat-header">Pasta</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Pasta Scampi's</div><div class="item-desc">Aglio olio / Verse kruiden / Rode peper / Knoflook</div></div><div class="item-price">€17</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Pasta Truffel</div><div class="item-desc">Walnoot / Truffel / Bospadden stoel / Parmezaan</div></div><div class="item-price">€18</div></div>
+  <div class="cat-header">Burgers</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Gezellig Burger</div><div class="item-desc">Oude kaas / Ui / Ei / Sla / Spek / Creamy bacon saus<br><span style="font-size:0.78rem;color:var(--gold)">Optioneel: Runder / Kip / Seizoensburger</span></div></div><div class="item-price">€18</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">All American</div><div class="item-desc">Bacon / Cheddar / Augurk / Sla / Ui / Mayonaise / BBQ saus</div></div><div class="item-price">€18</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Chicken (Veggi)</div><div class="item-desc">Tomaat / Sla / Cheddar / Relish saus</div></div><div class="item-price">€17</div></div>
+</div>
+
+<!-- HOOFDGERECHT -->
+<div class="menu-section" id="tab-hoofd">
+  <h2 class="menu-section-title">Hoofdgerecht</h2>
+  <p class="menu-section-sub">Geserveerd met salade & friet. Saus keuze: Champignon / Peper / Stroganof / Dragon / Rode wijn</p>
+  <div class="cat-header">Vis</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Zalm</div><div class="item-desc">Huis gerookt / Aardappel pure / Groente garnituur</div></div><div class="item-price">€24</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Tonijn Steak</div><div class="item-desc">Seizoens groente / Citrus bourblanc</div></div><div class="item-price">€23</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Catch of the Day</div><div class="item-desc">Suggestie van de chef</div></div><div class="item-price dagprijs">Dagprijs</div></div>
+  <div class="cat-header">Vlees</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">BBQ Sparerib</div><div class="item-desc">Sweet of Spicy Extra rib +€9</div></div><div class="item-price">€23</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Schnitzel</div><div class="item-desc">225 gram / Mouselline / Citroen / Groente garnituur</div></div><div class="item-price">€22</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Stoof Potje</div><div class="item-desc">Rund / Varken / Kip / Stroganof / Gratineerde kaas</div></div><div class="item-price">€23</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Entrecote</div><div class="item-desc">300 gram / Aardappel pure / Groente garnituur</div></div><div class="item-price">€26</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Tournedos <span class="item-tag">Signature</span></div><div class="item-desc">250 gram / Aardappel pure / Groente garnituur</div></div><div class="item-price">€32</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Kip op Stok</div><div class="item-desc">Atjar / Kroepoek / Saté saus</div></div><div class="item-price">€22</div></div>
+  <div class="cat-header">Vega</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Gevulde Paprika</div><div class="item-desc">Seizoens groente / Tomaten salsa / Basilicum</div></div><div class="item-price">€23</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Truffel Risotto</div><div class="item-desc">Bospadestoelen / Kruidencrumble / Truffelchips</div></div><div class="item-price">€19</div></div>
+  <div class="cat-header">Salades</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Warme Kip</div><div class="item-desc">Seizoens groente / Tomaten salsa / Basilicum</div></div><div class="item-price">€23</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Ossen Haas</div><div class="item-desc">Bospadestoelen / Kruidencrumble / Truffelchips</div></div><div class="item-price">€20</div></div>
+  <div class="cat-header">Bij gerechten</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Boeren Garnituur</div><div class="item-desc">Gebakken champignon / Ui / Spekjes</div></div><div class="item-price">€5</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Chique Friet</div><div class="item-desc">Truffel mayo / Parmezaan</div></div><div class="item-price">€5</div></div>
+</div>
+
+<!-- DESSERT -->
+<div class="menu-section" id="tab-dessert">
+  <h2 class="menu-section-title">Dessert</h2>
+  <p class="menu-section-sub">De perfecte afsluiting van uw avond</p>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Dame Blanche</div><div class="item-desc">Vanille ijs / Chocolade saus / Slagroom</div></div><div class="item-price">€8,90</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Lava Cake</div><div class="item-desc">Warm chocolade taartje / Vanille ijs / Chocolade saus</div></div><div class="item-price">€9</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Crème Brule</div><div class="item-desc">Vanille / Krokante suiker</div></div><div class="item-price">€8</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Complete Chaos <span class="item-tag">Verassing</span></div><div class="item-desc">Laat je verrassen door de chef!</div></div><div class="item-price">€10</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Kaasplankje</div><div class="item-desc">Vijgenbrood / Chutney / Dadel</div></div><div class="item-price">€13</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Voor de kleine eters</div><div class="item-desc">Aangepast dessert of Ola ijskaart</div></div><div class="item-price">€7</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Ola Handijsjes</div><div class="item-desc">Bekijk de handijsjeskaart</div></div><div class="item-price dagprijs">Op kaart</div></div>
+</div>
+
+<!-- KINDER MENU -->
+<div class="menu-section" id="tab-kinder">
+  <h2 class="menu-section-title">Kindermenu</h2>
+  <p class="menu-section-sub">Speciaal voor de kleine gasten</p>
+  <div class="cat-header">Voorgerecht</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Tomaten Soep</div><div class="item-desc">Verse groente / Gehakt</div></div><div class="item-price">€5</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Stok Broodje Kruidenboter</div><div class="item-desc">Komkommer / Kaas / Tomaat</div></div><div class="item-price">€3,50</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Runder Carpaccio</div><div class="item-desc">Tomaat / Parmezaan / Truffel mayo</div></div><div class="item-price">€7,50</div></div>
+  <div class="cat-header">Hoofdgerecht</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">BBQ Spareribje</div><div class="item-desc">Zoete sparibs / Friet / Mayonaise / Appelmoes</div></div><div class="item-price">€13</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Pizza Margherita</div><div class="item-desc">Kaas / Tomaat</div></div><div class="item-price">€10</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Pannenkoek</div><div class="item-desc">Stroop / Poedersuiker / Apenstroop</div></div><div class="item-price">€8</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Frietjes Kipnuggets</div><div class="item-desc">6 st / Frietjes / Mayonaise / Appelmoes</div></div><div class="item-price">€8,50</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Frietjes Frikandel of Kroket</div><div class="item-desc">Friet / Mayonaise / Appelmoes</div></div><div class="item-price">€8,50</div></div>
+  <div class="cat-header">Dessert</div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Sweet Child <span class="item-tag">Beker meenemen!</span></div><div class="item-desc">Vanille roomijs / Aardbeien roomijs / Slagroom / Koekje</div></div><div class="item-price">€6</div></div>
+  <div class="menu-item"><div class="item-info"><div class="item-name">Ola Handijsjes</div><div class="item-desc">Bekijk de handijsjeskaart</div></div><div class="item-price dagprijs">Op kaart</div></div>
+</div>
+
+<!-- DRANKEN -->
+<div class="menu-section" id="tab-dranken">
+  <h2 class="menu-section-title">Dranken</h2>
+  <p class="menu-section-sub">Voor elk moment de juiste drank</p>
+
+  <div class="cat-header">Koude dranken</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Ranja glas/kan</span><span>€2 / €6</span></div><div class="drink-item"><span>Melk</span><span>€3</span></div><div class="drink-item"><span>Chocomel</span><span>€3,20</span></div><div class="drink-item"><span>Fristi</span><span>€3,20</span></div><div class="drink-item"><span>Appelsap</span><span>€3,20</span></div><div class="drink-item"><span>Verse sinaasappelsap</span><span>€4,90</span></div><div class="drink-item"><span>Coca Cola / Zero</span><span>€3,20</span></div><div class="drink-item"><span>Sprite / Fanta</span><span>€3,20</span></div><div class="drink-item"><span>Fuze Tea (div. smaken)</span><span>€3,20</span></div><div class="drink-item"><span>Rivella light</span><span>€3,20</span></div></div>
+    <div><div class="drink-item"><span>Chaudfontaine (blauw/rood)</span><span>€3</span></div><div class="drink-item"><span>Chaudfontaine 0,75L</span><span>€6,50</span></div><div class="drink-item"><span>Royal Bliss Bitter Lemon</span><span>€3,20</span></div><div class="drink-item"><span>Royal Bliss Tonic</span><span>€3,20</span></div><div class="drink-item"><span>Royal Bliss Ginger Ale</span><span>€3,20</span></div></div>
+  </div>
+
+  <div class="cat-header">Warme dranken</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Koffie</span><span>€3,10</span></div><div class="drink-item"><span>Espresso</span><span>€3,20</span></div><div class="drink-item"><span>Dubbele Espresso</span><span>€3,50</span></div><div class="drink-item"><span>Cappuccino</span><span>€3,40</span></div><div class="drink-item"><span>Koffie Verkeerd</span><span>€3,40</span></div><div class="drink-item"><span>Latte Macchiato</span><span>€3,80</span></div><div class="drink-item"><span>Thee</span><span>€3</span></div><div class="drink-item"><span>Verse Muntthee</span><span>€3,80</span></div><div class="drink-item"><span>Verse Gemberthee</span><span>€3,80</span></div><div class="drink-item"><span>Warme Chocomel</span><span>€3,50</span></div></div>
+    <div><div class="drink-item"><span>Irish / Spanish / Italian coffee</span><span>€7,50</span></div><div class="drink-item"><span>French / Coffee 43 / Baileys coffee</span><span>€7,50</span></div><div class="drink-item"><span>Koffie Gezellig (Baileys, Licor 43, Marakesh)</span><span>€9,50</span></div><div class="drink-item"><span>Latte Special (div. smaken)</span><span>€5,20</span></div></div>
+  </div>
+
+  <div class="cat-header">Bieren van de tap</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Bavaria Pilsener 0,25</span><span>€3,40</span></div><div class="drink-item"><span>Bavaria Pilsener 0,50</span><span>€6,40</span></div><div class="drink-item"><span>La Trappe Dubbel</span><span>€5</span></div><div class="drink-item"><span>La Trappe Witte Trappist</span><span>€5,10</span></div><div class="drink-item"><span>Cornet</span><span>€5,20</span></div><div class="drink-item"><span>Brugse Zot Blond</span><span>€5,10</span></div><div class="drink-item"><span>Weihenstephaner 0,3</span><span>€5</span></div><div class="drink-item"><span>Weihenstephaner 0,5</span><span>€6,90</span></div><div class="drink-item"><span>Wisseltap</span><span>€5,50</span></div></div>
+    <div><div class="drink-item"><span>La Trappe Blond / Isidor / Trippel</span><span>€5,10</span></div><div class="drink-item"><span>La Trappe Quadruppel</span><span>€5,30</span></div><div class="drink-item"><span>La Trappe Nillis 0.0%</span><span>€4,70</span></div><div class="drink-item"><span>Bavaria 0.0% (div.)</span><span>€3,80</span></div><div class="drink-item"><span>Swinckels Superieur</span><span>€4,40</span></div><div class="drink-item"><span>Omer Blond / Brasserie LeFort</span><span>€5,30</span></div><div class="drink-item"><span>Brewdog Punk IPA / Desperados</span><span>€5,80</span></div><div class="drink-item"><span>Rodenbach Fruitage</span><span>€4,70</span></div></div>
+  </div>
+
+  <div class="cat-header">Cocktails & Specials</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Aperol Spritz</span><span>€8</span></div><div class="drink-item"><span>Limoncello Spritz</span><span>€8</span></div><div class="drink-item"><span>Campari Spritz</span><span>€8</span></div><div class="drink-item"><span>Martini Bellini</span><span>€8</span></div><div class="drink-item"><span>Hendricks Gin & Tonic</span><span>€8,90</span></div></div>
+    <div><div class="drink-item"><span>Prosecco 0.0%</span><span>€5,50</span></div><div class="drink-item"><span>Lyre's Pink London Gin & Tonic</span><span>€7,50</span></div><div class="drink-item"><span>Crodino</span><span>€5,10</span></div><div class="drink-item"><span>Kir Royal 0.0%</span><span>€8</span></div></div>
+  </div>
+
+  <div class="cat-header">Gin & Tonic</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Gordon's Pink</span><span>€8,50</span></div><div class="drink-item"><span>Bombay</span><span>€8,50</span></div></div>
+    <div><div class="drink-item"><span>Hendrick's</span><span>€8,90</span></div><div class="drink-item"><span>Tanqueray Ten</span><span>€9,50</span></div></div>
+  </div>
+
+  <div class="cat-header">Gedistilleerd</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Jonge / Oude jenever</span><span>€3,50</span></div><div class="drink-item"><span>Vieux / Schrobbelér / Jagermeister</span><span>€3,50</span></div><div class="drink-item"><span>Bacardi Bianco</span><span>€4,90</span></div><div class="drink-item"><span>Smirnoff Vodka</span><span>€4,90</span></div><div class="drink-item"><span>Baileys / Campari / Malibu</span><span>€4,90</span></div><div class="drink-item"><span>Licor 43 / Ameretto / Tia Maria</span><span>€4,90</span></div><div class="drink-item"><span>Limoncello / Cointreau</span><span>€5</span></div></div>
+    <div><div class="drink-item"><span>Johnny Walker Red Label</span><span>€5,50</span></div><div class="drink-item"><span>Johnny Walker Black Label</span><span>€5,90</span></div><div class="drink-item"><span>Jack Daniel's</span><span>€6,30</span></div><div class="drink-item"><span>Jameson</span><span>€5,10</span></div><div class="drink-item"><span>The Glenlivet</span><span>€6,60</span></div><div class="drink-item"><span>Remy Martin V.S.O.P</span><span>€6,50</span></div><div class="drink-item"><span>Moët & Chandon 75cl</span><span>€75</span></div></div>
+  </div>
+
+  <div class="cat-header">PSV</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Witte / Rode Port</span><span>€4,80</span></div><div class="drink-item"><span>Tawny Port 10 jaar</span><span>€6,50</span></div><div class="drink-item"><span>Sherry Dry</span><span>€4,50</span></div></div>
+    <div><div class="drink-item"><span>Martini Wit / Rood</span><span>€4,80</span></div><div class="drink-item"><span>Prosecco</span><span>€6</span></div><div class="drink-item"><span>Cava per fles</span><span>€32,50</span></div></div>
+  </div>
+
+  <div class="cat-header">Wijnen per glas</div>
+  <div class="dranken-grid">
+    <div><div class="drink-item"><span>Palombe Sauvignon Blanc</span><span>€5</span></div><div class="drink-item"><span>Monterre Chardonnay</span><span>€5,20</span></div><div class="drink-item"><span>Pinot Grigio</span><span>€5,80</span></div><div class="drink-item"><span>Zoete Witte Wijn</span><span>€5</span></div></div>
+    <div><div class="drink-item"><span>Palombe Carignan Rood</span><span>€5</span></div><div class="drink-item"><span>Monterre Merlot</span><span>€5,20</span></div><div class="drink-item"><span>Monterre Grenache Rosé</span><span>€5,20</span></div><div class="drink-item"><span>Hugo</span><span>€5,20</span></div></div>
+  </div>
+</div>
+
+<!-- WIJNEN -->
+<div class="menu-section" id="tab-wijn">
+  <h2 class="menu-section-title">Wijnkaart</h2>
+  <p class="menu-section-sub">Een selectie van onze mooiste wijnen</p>
+
+  <div class="cat-header">Witte Wijn</div>
+  <div class="wijn-card"><div><div class="wijn-naam">Passimento Bianco</div><div class="wijn-desc">Citrus / Perzik / Amandel</div><div class="wijn-origin">Garganega Italië</div></div><div class="wijn-price">€29,90</div></div>
+  <div class="wijn-card"><div><div class="wijn-naam">Lenotti Pinot Grigio</div><div class="wijn-desc">Peer / Meloen / Ananas</div><div class="wijn-origin">Venezie Italië</div></div><div class="wijn-price">€29,90</div></div>
+  <div class="wijn-card"><div><div class="wijn-naam">Domaine Les Salices Viognier</div><div class="wijn-desc">Abrikoos / Roos / Bloesem / Brioche / Hazelnoot</div><div class="wijn-origin">Viognier Frankrijk</div></div><div class="wijn-price">€31,90</div></div>
+  <div class="wijn-card"><div><div class="wijn-naam">Cruz del Castillo Luna Verde</div><div class="wijn-desc">Wit fruit / Venkel / Appel</div><div class="wijn-origin">Verdejo Spanje</div></div><div class="wijn-price">€27,50</div></div>
+
+  <div class="cat-header">Mousserende Wijn</div>
+  <div class="wijn-card"><div><div class="wijn-naam">Eteri Cava Brut</div><div class="wijn-desc">Brioche / Appel / Fris</div><div class="wijn-origin">Spanje</div></div><div class="wijn-price">€32,50</div></div>
+  <div class="wijn-card"><div><div class="wijn-naam">Moët & Chandon Brut</div><div class="wijn-desc">Citrus / Fris / Elegant</div><div class="wijn-origin">Frankrijk</div></div><div class="wijn-price">€75</div></div>
+
+  <div class="cat-header">Rosé Wijn</div>
+  <div class="wijn-card"><div><div class="wijn-naam">11 Minutes Rosato</div><div class="wijn-desc">Rood fruit / Kersen / Framboos</div><div class="wijn-origin">Italië</div></div><div class="wijn-price">€35</div></div>
+
+  <div class="cat-header">Rode Wijn</div>
+  <div class="wijn-card"><div><div class="wijn-naam">Passimento Rosso</div><div class="wijn-desc">Rood fruit / Kruidige tonen</div><div class="wijn-origin">Italië</div></div><div class="wijn-price">€29,90</div></div>
+  <div class="wijn-card"><div><div class="wijn-naam">Lenotti Capomastro</div><div class="wijn-desc">Rood fruit / Pittig</div><div class="wijn-origin">Italië</div></div><div class="wijn-price">€26,50</div></div>
+  <div class="wijn-card"><div><div class="wijn-naam">Pasqua Desire Lush</div><div class="wijn-desc">Pruimen / Rood fruit / Koffie / Cacao</div><div class="wijn-origin">Italië</div></div><div class="wijn-price">€32,50</div></div>
+</div>
+
+<footer>
+  <p>© 2025 Brasserie Gezellig Leende &nbsp;·&nbsp; Langstraat 8, 5595 AA Leende &nbsp;·&nbsp; <a href="tel:0402062019">040-2062019</a> &nbsp;·&nbsp; <a href="mailto:info@brasseriegezellig.nl">info@brasseriegezellig.nl</a></p>
+  <p style="margin-top:0.4rem"><a href="privacy.html">Privacyverklaring</a> &nbsp;·&nbsp; <a href="#">Cookies</a></p>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+<!-- COOKIE BANNER — plak dit net voor </body> op elke pagina -->
+<div id="cookieBanner" style="
+  display:none;
+  position:fixed;
+  bottom:0; left:0; right:0;
+  z-index:9999;
+  background:#0f1f12;
+  border-top:2px solid rgba(184,137,42,0.4);
+  padding:1.2rem 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1rem;
+  font-family:'Inter',sans-serif;
+">
+  <p style="color:rgba(255,255,255,0.75);font-size:0.85rem;line-height:1.6;max-width:700px;margin:0;">
+    Wij gebruiken cookies om uw gebruikerservaring te verbeteren en het websiteverkeer te analyseren.
+    Door op <strong style="color:#d4a23c">Accepteren</strong> te klikken gaat u akkoord met ons cookiegebruik.
+    <a href="privacy.html" style="color:#b8892a;text-decoration:none;margin-left:0.3rem;">Meer informatie</a>
+  </p>
+  <div style="display:flex;gap:0.8rem;flex-shrink:0;">
+    <button onclick="weigercookies()" style="
+      background:transparent;
+      border:1.5px solid rgba(255,255,255,0.3);
+      color:rgba(255,255,255,0.7);
+      padding:0.55rem 1.2rem;
+      border-radius:4px;
+      font-size:0.82rem;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+    ">Weigeren</button>
+    <button onclick="accepteercookies()" style="
+      background:#b8892a;
+      border:none;
+      color:#0f1f12;
+      padding:0.55rem 1.4rem;
+      border-radius:4px;
+      font-size:0.82rem;
+      font-weight:600;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+    ">Accepteren</button>
+  </div>
+</div>
+
+<script>
+  // Toon de banner alleen als de gebruiker nog geen keuze heeft gemaakt
+  if (!localStorage.getItem('cookieKeuze')) {
+    document.getElementById('cookieBanner').style.display = 'flex';
+  }
+  function accepteercookies() {
+    localStorage.setItem('cookieKeuze', 'geaccepteerd');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+  function weigercookies() {
+    localStorage.setItem('cookieKeuze', 'geweigerd');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+</script>
+<!-- EINDE COOKIE BANNER -->
+</body>
+</html>
