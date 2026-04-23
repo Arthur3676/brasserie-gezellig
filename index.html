@@ -271,13 +271,12 @@
 <nav>
   <a href="index.html" class="logo">Brasserie <span>Gezellig</span></a>
   <ul>
-  <li><a href="menukaart.html">Menukaart</a></li>
-  <li><a href="arrangementen.html">Arrangementen</a></li>
-  <li><a href="galerij.html">Galerij</a></li>
-  <li><a href="nieuws.html">Nieuws & Agenda</a></li>
-  <li><a href="contact.html">Contact</a></li>
-  <li><a href="index.html#reserveer" class="nav-cta">Reserveer</a></li>
-</ul>
+    <li><a href="menukaart.html">Menukaart</a></li>
+    <li><a href="arrangementen.html">Arrangementen</a></li>
+    <li><a href="nieuws.html">Nieuws & Agenda</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="#reserveer" class="nav-cta">Reserveer</a></li>
+  </ul>
 </nav>
 
 <!-- HERO -->
@@ -292,6 +291,13 @@
     </div>
   </div>
 </section>
+
+<!-- NETLIFY FORM DETECTIE (verborgen) -->
+<form name="reservering" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="reservering">
+  <input name="bot-field">
+  <input name="naam"><input name="datum"><input name="tijdstip"><input name="personen"><input name="telefoon">
+</form>
 
 <!-- RESERVERINGSTOOL -->
 <div class="reserve-wrap" id="reserveer">
@@ -476,7 +482,7 @@
   document.getElementById('resDate').min = today;
   document.getElementById('resDate').value = today;
 
-  function submitReservation() {
+  async function submitReservation() {
     const date = document.getElementById('resDate').value;
     const time = document.getElementById('resTime').value;
     const pax  = document.getElementById('resPax').value;
@@ -488,6 +494,21 @@
     const days = ['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
     const months = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
     const dateStr = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+
+    // Stuur naar Netlify Forms
+    await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'form-name': 'reservering',
+        'naam': name,
+        'datum': dateStr,
+        'tijdstip': time,
+        'personen': pax,
+        'telefoon': tel
+      }).toString()
+    }).catch(() => {}); // Stille fout — bevestiging altijd tonen
+
     document.getElementById('confirmDetails').innerHTML = `
       <div><span>Naam</span><span>${name}</span></div>
       <div><span>Datum</span><span>${dateStr}</span></div>
@@ -506,54 +527,19 @@
     if (e.target === document.getElementById('confirmOverlay')) closeConfirm();
   });
 </script>
-<!-- COOKIE BANNER — plak dit net voor </body> op elke pagina -->
-<div id="cookieBanner" style="
-  display:none;
-  position:fixed;
-  bottom:0; left:0; right:0;
-  z-index:9999;
-  background:#0f1f12;
-  border-top:2px solid rgba(184,137,42,0.4);
-  padding:1.2rem 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:1rem;
-  font-family:'Inter',sans-serif;
-">
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0f1f12;border-top:2px solid rgba(184,137,42,0.4);padding:1.2rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-family:'Inter',sans-serif;">
   <p style="color:rgba(255,255,255,0.75);font-size:0.85rem;line-height:1.6;max-width:700px;margin:0;">
     Wij gebruiken cookies om uw gebruikerservaring te verbeteren en het websiteverkeer te analyseren.
     Door op <strong style="color:#d4a23c">Accepteren</strong> te klikken gaat u akkoord met ons cookiegebruik.
     <a href="privacy.html" style="color:#b8892a;text-decoration:none;margin-left:0.3rem;">Meer informatie</a>
   </p>
   <div style="display:flex;gap:0.8rem;flex-shrink:0;">
-    <button onclick="weigercookies()" style="
-      background:transparent;
-      border:1.5px solid rgba(255,255,255,0.3);
-      color:rgba(255,255,255,0.7);
-      padding:0.55rem 1.2rem;
-      border-radius:4px;
-      font-size:0.82rem;
-      font-family:'Inter',sans-serif;
-      cursor:pointer;
-    ">Weigeren</button>
-    <button onclick="accepteercookies()" style="
-      background:#b8892a;
-      border:none;
-      color:#0f1f12;
-      padding:0.55rem 1.4rem;
-      border-radius:4px;
-      font-size:0.82rem;
-      font-weight:600;
-      font-family:'Inter',sans-serif;
-      cursor:pointer;
-    ">Accepteren</button>
+    <button onclick="weigercookies()" style="background:transparent;border:1.5px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);padding:0.55rem 1.2rem;border-radius:4px;font-size:0.82rem;font-family:'Inter',sans-serif;cursor:pointer;">Weigeren</button>
+    <button onclick="accepteercookies()" style="background:#b8892a;border:none;color:#0f1f12;padding:0.55rem 1.4rem;border-radius:4px;font-size:0.82rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">Accepteren</button>
   </div>
 </div>
 
 <script>
-  // Toon de banner alleen als de gebruiker nog geen keuze heeft gemaakt
   if (!localStorage.getItem('cookieKeuze')) {
     document.getElementById('cookieBanner').style.display = 'flex';
   }
@@ -566,6 +552,6 @@
     document.getElementById('cookieBanner').style.display = 'none';
   }
 </script>
-<!-- EINDE COOKIE BANNER -->
+
 </body>
 </html>
